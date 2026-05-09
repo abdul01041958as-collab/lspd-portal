@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>LSPD Blackberry RP — Официальный портал</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+            background: #0a0c15;
+            color: #e8edf5;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* ГЛАВНЫЙ ЭКРАН С ВОЛНАМИ */
+        .hero {
+            position: relative;
+            min-height: 60vh;
+            background: linear-gradient(135deg, #0a0c15 0%, #0f1535 50%, #0a0c15 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .waves-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.35;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 40px 20px;
+        }
+
+        .lspd-badge {
+            font-size: 80px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #00aaff;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff, #00aaff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+        }
+
+        .hero .subtitle {
+            font-size: 18px;
+            color: #8a9bc0;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 40px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00aaff, #0066cc);
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(0, 170, 255, 0.6);
+        }
+
+        .btn-outline {
+            border: 2px solid #00aaff;
+            background: transparent;
+            color: #00aaff;
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 170, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            background: #0a0c15;
+            padding: 60px 20px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* ВЕРХНЯЯ ПАНЕЛЬ */
+        .user-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f1425;
+            padding: 12px 30px;
+            border-bottom: 1px solid #00aaff30;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo span {
+            font-size: 28px;
+            font-weight: 800;
+            color: #00aaff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid #00aaff;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: #e8edf5;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #00aaff;
+            color: #0a0c15;
+        }
+
+        /* СТАТИСТИКА ОТДЕЛОВ (как в старом дизайне) */
+        .stats-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #00aaff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .compact-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .compact-dept-card {
+            background: linear-gradient(135deg, #1a1f2e, #0f1425);
+            border-radius: 16px;
+            padding: 18px 24px;
+            border-left: 4px solid #00aaff;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .compact-dept-card:hover {
+            transform: translateX(5px);
+            background: #1f2538;
+        }
+
+        .compact-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .compact-dept-name {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .dept-color-PAI { color: #00ff88; }
+        .dept-color-CPD { color: #00aaff; }
+        .dept-color-SWAT { color: #a0a0a0; }
+        .dept-color-IAD { color: #ff4444; }
+        .dept-color-PAD { color: #ffcc00; }
+        .dept-color-GATE { color: #ff8844; }
+
+        .compact-norm {
+            font-size: 12px;
+            color: #6a7c9e;
+        }
+
+        .compare-row {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .week-compare {
+            flex: 1;
+        }
+
+        .week-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #8a9bc0;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .week-label.last {
+            color: #ffaa44;
+        }
+
+        .week-label.current {
+            color: #00ff88;
+        }
+
+        .percent-value {
+            font-size: 28px;
+            font-weight: 800;
+            font-family: monospace;
+        }
+
+        .percent-value.last {
+            color: #ffaa44;
+        }
+
+        .percent-value.current {
+            color: #00ff88;
+        }
+
+        .percent-bar-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .percent-bar {
+            flex: 1;
+            height: 6px;
+            background: #2a2f3e;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .percent-bar-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .percent-bar-fill.last {
+            background: linear-gradient(90deg, #ffaa44, #ff8844);
+        }
+
+        .percent-bar-fill.current {
+            background: linear-gradient(90deg, #00ff88, #00aaff);
+        }
+
+        .reports-count-compact {
+            font-size: 11px;
+            color: #6a7c9e;
+            margin-top: 8px;
+        }
+
+        /* ФОРМА ОТЧЕТА */
+        .form-card {
+            background: #1a1f2e;
+            border-radius: 24px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .form-card h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #00aaff;
+        }
+
+        .activity-select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0 20px 0;
+            background: #0a0c15;
+            border: 1px solid #00aaff;
+            color: white;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .progress-info {
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #0a0c15;
+            border: 1px solid #00aaff;
+            color: white;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #00aaff, #0066cc);
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(0, 170, 255, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ТАБЛИЦЫ ОТЧЁТОВ */
+        .reports-table-wrapper {
+            overflow-x: auto;
+            background: #1a1f2e;
+            border-radius: 24px;
+            padding: 20px;
+        }
+
+        .reports-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .reports-table th, .reports-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #2a2f3e;
+            vertical-align: top;
+        }
+
+        .reports-table th {
+            color: #00aaff;
+            font-weight: 600;
+        }
+
+        .activity-badge {
+            background: rgba(0, 170, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .proof-btn {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.15);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: #00ff88;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .filter-badge {
+            background: #1a1f2e;
+            border: 1px solid #00aaff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .filter-badge.active {
+            background: #00aaff;
+            color: #0a0c15;
+        }
+
+        /* РОЛИ И СТАРШИЙ СОСТАВ */
+        .role-select {
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 8px;
+            background: #0a0c15;
+            color: white;
+            width: 100%;
+        }
+
+        .profile-card {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1f2e;
+            border-radius: 24px;
+            padding: 30px;
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: #0a0c15;
+            border-top: 1px solid #1a1f2e;
+            margin-top: 40px;
+            font-size: 12px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="user-bar">
+    <div class="logo"><span>👮 LSPD</span></div>
+    <div class="nav-buttons" id="navButtons"></div>
+</div>
+
+<div class="hero">
+    <svg class="waves-bg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path fill="#00aaff" fill-opacity="0.08" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,261.3C672,256,768,224,864,208C960,192,1056,192,1152,197.3C1248,203,1344,213,1392,218.7L1440,224L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"/>
+        <path fill="#0066cc" fill-opacity="0.08" d="M0,224L48,218.7C96,213,192,203,288,197.3C384,192,480,192,576,197.3C672,203,768,213,864,208C960,203,1056,181,1152,165.3C1248,149,1344,139,1392,133.3L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"/>
+        <path fill="#003366" fill-opacity="0.08" d="M0,160L48,154.7C96,149,192,139,288,144C384,149,480,171,576,176C672,181,768,171,864,160C960,149,1056,139,1152,138.7C1248,139,1344,149,1392,154.7L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"/>
+    </svg>
+    <div class="hero-content">
+        <div class="lspd-badge">👮‍♂️⭐👮‍♀️</div>
+        <h1>LSPD</h1>
+        <div class="subtitle">LOS SANTOS POLICE DEPARTMENT</div>
+        <div class="subtitle" style="font-size: 14px;">GTA 5 RP | сервер Blackberry</div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="container">
+        <div id="stats" class="stats-section">
+            <h2 class="section-title">📊 СТАТИСТИКА ОТДЕЛОВ</h2>
+            <div id="compactStats" class="compact-stats">
+                <div class="loading">⏳ ЗАГРУЗКА...</div>
+            </div>
+        </div>
+
+        <div id="reportSection" class="form-card">
+            <div id="reportContent"></div>
+        </div>
+
+        <div id="activitiesSection">
+            <h2 class="section-title">📋 ОТЧЁТЫ ПО НАПРАВЛЕНИЯМ</h2>
+            <div id="activitiesFilters" class="filter-buttons"></div>
+            <div id="activitiesReportsContainer" class="reports-table-wrapper">
+                <div class="loading">⏳ ЗАГРУЗКА...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Фракция LSPD | Los Santos Police Department | GTA 5 RP | Сервер Blackberry</p>
+    <p>To Protect and Serve</p>
+</footer>
+
+<script>
+    const SUPABASE_URL = 'https://xhgudkefqmntnekaxgke.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_Svhz_VfE3OTEJckPSHoHrw_2e5BxGQF';
+    const CHIEF_EMAIL = 'abdul01041958.as@gmail.com';
+
+    let currentUser = null;
+    let allReports = [], currentReports = [], lastReports = [];
+    let currentDept = 'PAI';
+    let activityFilter = 'all';
+
+    // ========== ДАННЫЕ ОТДЕЛОВ И АКТИВНОСТЕЙ ==========
+    const activityWeight = { 'CPD_fines':15, 'CPD_searches':3, 'IAD_rounds':2, 'IAD_inspection':15 };
+    const departmentActivities = {
+        PAI: [{id:"PAI_interview",name:"Собеседование",norm:14},{id:"PAI_training",name:"Тренировка LSPD",norm:3}],
+        CPD: [{id:"CPD_training",name:"Тренировка LSPD",norm:3},{id:"CPD_fines",name:"15 штрафов (за день)",norm:105},{id:"CPD_searches",name:"3 обыска (за день)",norm:21}],
+        SWAT: [{id:"SWAT_airdrop",name:"Участие в Аир Дропе",norm:10},{id:"SWAT_training",name:"Тренировка LSPD",norm:3},{id:"SWAT_patrol",name:"Усиленный патруль",norm:4},{id:"SWAT_supply",name:"Поставка EMS/NG",norm:5}],
+        IAD: [{id:"IAD_training",name:"Тренировка LSPD",norm:3},{id:"IAD_inspection",name:"Проверка документов на наличие нарушений (15/день)",norm:100},{id:"IAD_rounds",name:"2 организованных объезда (за день)",norm:14}],
+        PAD: [{id:"PAD_gmp",name:"Организовано ГМП (за неделю)",norm:1},{id:"PAD_mp",name:"Организовано МП (за неделю)",norm:2},{id:"PAD_participation",name:"Участие в мероприятии/ГМП (за неделю)",norm:5}],
+        GATE: [{id:"GATE_airdrop",name:"Участие в Аир Дропе",norm:10},{id:"GATE_training",name:"Тренировка LSPD",norm:3},{id:"GATE_patrol",name:"Усиленный патруль",norm:4},{id:"GATE_supply",name:"Поставка EMS/NG",norm:5}]
+    };
+    const roleNames = {
+        1:'👑 Шеф полиции',2:'⭐ Зам. Шефа',3:'📚 Нач. PAI',4:'🚔 Нач. CPD',5:'🔫 Нач. SWAT',
+        6:'⚖️ Нач. IAD',7:'📢 Нач. PAD',8:'⚡ Нач. GATE',9:'📚 Зам. PAI',10:'🚔 Зам. CPD',
+        11:'🔫 Зам. SWAT',12:'⚖️ Зам. IAD',13:'📢 Зам. PAD',14:'⚡ Зам. GATE',15:'👮 Рядовой'
+    };
+
+    function getWeekNumber(d=new Date()){let date=new Date(d);date.setHours(0,0,0,0);date.setDate(date.getDate()+3-(date.getDay()+6)%7);let week1=new Date(date.getFullYear(),0,4);return 1+Math.round(((date-week1)/86400000-3+(week1.getDay()+6)%7)/7);}
+    function getActivityTotal(reports,deptId,activityId){let total=0;for(let r of reports) if(r.dept===deptId && r.activity_id===activityId) total+=activityWeight[activityId]||1; return total;}
+    function calculateDeptProgress(reports,deptId){let acts=departmentActivities[deptId];if(!acts)return 0;let sum=0;for(let a of acts){let total=getActivityTotal(reports,deptId,a.id);let percent=Math.min(100,Math.round((total/a.norm)*100));sum+=percent;}return Math.round(sum/acts.length);}
+
+    async function supabaseFetch(path,options={}){const headers={'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json'};const res=await fetch(`${SUPABASE_URL}${path}`,{...options,headers});if(!res.ok)throw new Error(await res.text());return res.json();}
+    async function fetchReports(){const data=await supabaseFetch('/rest/v1/reports?select=*&order=date.desc');allReports=data;let cw=getWeekNumber(),lw=cw-1;currentReports=allReports.filter(r=>getWeekNumber(new Date(r.date))===cw);lastReports=allReports.filter(r=>getWeekNumber(new Date(r.date))===lw);}
+    async function fetchAllUsers(){return supabaseFetch('/rest/v1/users?select=*');}
+    async function updateUserRole(userId,roleId,positionName,dept){await supabaseFetch(`/rest/v1/users?id=eq.${userId}`,{method:'PATCH',body:JSON.stringify({role_id:roleId,position_name:positionName,department:dept})});}
+    function canSubmitForDept(user,deptId){if(!user)return false;if(user.role_id===1||user.role_id===2)return true;if(user.role_id>=3 && user.role_id<=14)return user.department===deptId;return false;}
+
+    async function submitReport(reportData){
+        if(!currentUser){ alert('Чтобы отправить отчёт, войдите в аккаунт'); return false; }
+        await supabaseFetch('/rest/v1/reports',{method:'POST',body:JSON.stringify(reportData)});
+        await fetchReports();
+        await supabaseFetch(`/rest/v1/users?id=eq.${currentUser.id}`,{method:'PATCH',body:JSON.stringify({reputation:(currentUser.reputation||0)+1,total_reports:(currentUser.total_reports||0)+1})});
+        currentUser.reputation=(currentUser.reputation||0)+1;
+        currentUser.total_reports=(currentUser.total_reports||0)+1;
+        return true;
+    }
+
+    async function updateAllStats(){
+        let html='';
+        for(let dept of ['PAI','CPD','SWAT','IAD','PAD','GATE']){
+            let currentProgress=calculateDeptProgress(currentReports,dept);
+            let lastProgress=calculateDeptProgress(lastReports,dept);
+            html+=`<div class="compact-dept-card" onclick="switchToDept('${dept}')"><div class="compact-header"><span class="compact-dept-name dept-color-${dept}">${dept}</span><span class="compact-norm">недельная норма</span></div><div class="compare-row"><div class="week-compare"><div class="week-label last">📆 ПРОШЛАЯ НЕДЕЛЯ</div><div class="percent-value last">${lastProgress}%</div><div class="percent-bar-container"><div class="percent-bar"><div class="percent-bar-fill last" style="width:${lastProgress}%"></div></div></div><div class="reports-count-compact">📊 ${lastProgress}% выполнения</div></div><div class="week-compare"><div class="week-label current">📅 ТЕКУЩАЯ НЕДЕЛЯ</div><div class="percent-value current">${currentProgress}%</div><div class="percent-bar-container"><div class="percent-bar"><div class="percent-bar-fill current" style="width:${currentProgress}%"></div></div></div><div class="reports-count-compact">📊 ${currentProgress}% выполнения</div></div></div></div>`;
+        }
+        document.getElementById('compactStats').innerHTML=html;
+    }
+
+    function updateActivitiesReportsPage(){
+        let filtered=currentReports;
+        if(activityFilter!=='all') filtered=filtered.filter(r=>r.dept===activityFilter);
+        if(!filtered.length){ document.getElementById('activitiesReportsContainer').innerHTML='<div class="loading">📭 Нет отчётов</div>'; return; }
+        let html=`<table class="reports-table"><thead><tr><th>Офицер</th><th>Отдел</th><th>Активность</th><th>Описание</th><th>Док-ва</th><th>Дата</th></tr></thead><tbody>`;
+        for(let r of filtered.slice().reverse()){
+            let proofHtml=r.proof?`<a href="${escapeHtml(r.proof)}" target="_blank" class="proof-btn">🔗 Ссылка на док-ва</a>`:'<span style="color:#6a7c9e;">—</span>';
+            let actName=departmentActivities[r.dept]?.find(a=>a.id===r.activity_id)?.name||r.activity_id;
+            html+=`<tr><td><strong>${escapeHtml(r.officer_name)}</strong></td><td><span class="activity-badge">${escapeHtml(r.dept)}</span></td><td>${escapeHtml(actName)}</td><td style="max-width:350px;word-break:break-word;">${escapeHtml(r.description)}</td><td>${proofHtml}</td><td style="font-size:12px;white-space:nowrap;">${new Date(r.date).toLocaleString()}</td></tr>`;
+        }
+        html+=`</tbody></table>`;
+        document.getElementById('activitiesReportsContainer').innerHTML=html;
+    }
+
+    function setupFilters(){
+        let filtersDiv=document.getElementById('activitiesFilters');
+        let depts=['all','PAI','CPD','SWAT','IAD','PAD','GATE'];
+        filtersDiv.innerHTML=depts.map(d=>`<span class="filter-badge ${activityFilter===d?'active':''}" data-filter="${d}">${d==='all'?'Все отделы':d}</span>`).join('');
+        document.querySelectorAll('.filter-badge').forEach(el=>{el.addEventListener('click',()=>{activityFilter=el.dataset.filter;document.querySelectorAll('.filter-badge').forEach(f=>f.classList.remove('active'));el.classList.add('active');updateActivitiesReportsPage();});});
+    }
+
+    function updateReportForm(){
+        const container=document.getElementById('reportContent');
+        if(!currentUser){
+            container.innerHTML=`<div style="text-align:center;padding:20px;"><p>🔐 Чтобы отправить отчёт, войдите в аккаунт</p><button class="nav-btn" onclick="loginWithGoogle()" style="margin-top:10px;">🔐 Войти через Google</button></div>`;
+            return;
+        }
+        if(!canSubmitForDept(currentUser,currentDept)){
+            container.innerHTML=`<div style="padding:20px;text-align:center;">⛔ У вас нет прав на отправку отчётов для отдела ${currentDept}</div>`;
+            return;
+        }
+        let selectHtml=`<select id="activitySelect" class="activity-select"><option value="">-- Выберите действие --</option>`;
+        for(let act of departmentActivities[currentDept]) selectHtml+=`<option value="${act.id}">${act.name} (норма: ${act.norm})</option>`;
+        selectHtml+=`</select><div id="progressDept"></div>`;
+        container.innerHTML=`<h3>📝 ОТЧЕТ ${currentDept}</h3>${selectHtml}<input type="text" id="reportDesc" placeholder="Описание выполненной работы..."><input type="text" id="reportProof" placeholder="🔗 Ссылка на доказательства"><button class="submit-btn" onclick="sendReport()">📬 ОТПРАВИТЬ ОТЧЕТ</button>`;
+        let reportsForDept=currentReports.filter(r=>r.dept===currentDept);
+        let progHtml='<div style="display:flex;flex-direction:column;gap:8px;">';
+        for(let act of departmentActivities[currentDept]){
+            let total=getActivityTotal(reportsForDept,currentDept,act.id);
+            let percent=Math.min(100,Math.round((total/act.norm)*100));
+            progHtml+=`<div><div style="display:flex;justify-content:space-between;"><span>${act.name}</span><span>${total}/${act.norm}</span></div><div style="height:4px;background:#2a2f3e;"><div style="width:${percent}%;height:4px;background:linear-gradient(90deg,#00ff88,#00aaff);"></div></div></div>`;
+        }
+        progHtml+='</div>';
+        document.getElementById('progressDept').innerHTML=progHtml;
+    }
+
+    window.sendReport=async()=>{
+        if(!currentUser){alert('Войдите в аккаунт'); return;}
+        let a=document.getElementById('activitySelect').value, d=document.getElementById('reportDesc').value.trim(), p=document.getElementById('reportProof').value.trim();
+        if(!a||!d){alert('Выберите действие и описание'); return;}
+        let actName=departmentActivities[currentDept].find(act=>act.id===a)?.name;
+        let success=await submitReport({dept:currentDept,officer_name:`${currentUser.first_name} ${currentUser.last_name}`,activity_id:a,activityName:actName,description:d,proof:p||null,date:new Date().toISOString()});
+        if(success) await refreshAll();
+    };
+
+    window.switchToDept=(dept)=>{currentDept=dept;updateReportForm();window.location.hash='reportSection';document.getElementById('reportSection').scrollIntoView({behavior:'smooth'});};
+
+    async function refreshAll(){
+        await fetchReports();
+        await updateAllStats();
+        updateActivitiesReportsPage();
+        updateReportForm();
+        await renderSeniorStaff();
+    }
+
+    window.loginWithGoogle=()=>{
+        const redirectTo=window.location.origin;
+        window.location.href=`${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`;
+    };
+
+    async function getDBUser(email){
+        const res=await fetch(`${SUPABASE_URL}/rest/v1/users?email=eq.${encodeURIComponent(email)}`,{headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`}});
+        return (await res.json())[0];
+    }
+
+    async function saveDBUser(email,firstName,lastName,avatarUrl){
+        const roleId=email===CHIEF_EMAIL?1:15;
+        const positionName=email===CHIEF_EMAIL?'Шеф полиции':'Рядовой сотрудник';
+        const existing=await getDBUser(email);
+        if(!existing){
+            await fetch(`${SUPABASE_URL}/rest/v1/users`,{method:'POST',headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({email,first_name:firstName,last_name:lastName,avatar_url:avatarUrl,role_id:roleId,position_name:positionName,hired_date:new Date().toISOString()})});
+        }else if(existing.first_name!==firstName||existing.last_name!==lastName){
+            await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${existing.id}`,{method:'PATCH',headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({first_name:firstName,last_name:lastName})});
+        }
+        return getDBUser(email);
+    }
+
+    window.submitNameForm=async(email,avatarUrl)=>{
+        const firstName=document.getElementById('firstName').value.trim(), lastName=document.getElementById('lastName').value.trim();
+        if(!firstName||!lastName) return alert('Заполните оба поля');
+        const user=await saveDBUser(email,firstName,lastName,avatarUrl);
+        localStorage.setItem('lspd_user',JSON.stringify(user));
+        await loadUserAndRefresh();
+    };
+
+    function showNameForm(email,avatarUrl){
+        document.getElementById('reportContent').innerHTML=`<div style="text-align:center;max-width:400px;margin:0 auto;"><div style="font-size:60px;">👮</div><h2>Заполните имя и фамилию</h2><input type="text" id="firstName" placeholder="Имя"><input type="text" id="lastName" placeholder="Фамилия"><button class="btn" onclick="submitNameForm('${email}','${avatarUrl}')">Сохранить</button></div>`;
+    }
+
+    async function loadUserAndRefresh(){
+        const saved=localStorage.getItem('lspd_user');
+        if(saved){
+            currentUser=JSON.parse(saved);
+            document.getElementById('navButtons').innerHTML=`<button class="nav-btn" onclick="showProfile(${currentUser.id})">👤 Личный кабинет</button><button class="nav-btn" onclick="logout()">🚪 Выйти</button>`;
+            await refreshAll();
+        }else{
+            document.getElementById('navButtons').innerHTML=`<button class="nav-btn" onclick="loginWithGoogle()">🔐 Войти через Google</button>`;
+            await refreshAll();
+        }
+    }
+
+    window.showProfile=async(userId)=>{
+        let users=await fetchAllUsers(), u=users.find(u=>u.id===userId);
+        if(!u) return;
+        let days=Math.floor((new Date()-new Date(u.hired_date))/(1000*60*60*24));
+        document.body.insertAdjacentHTML('beforeend',`<div class="overlay" onclick="closeModal()"></div><div class="profile-card"><div style="font-size:48px;">👮</div><h2>${escapeHtml(u.first_name)} ${escapeHtml(u.last_name)}</h2><p>${roleNames[u.role_id]}</p><p>📅 Стаж: ${days} дн.</p><p>📊 Отчётов: ${u.total_reports||0}</p><p>⭐ Репутация: ${u.reputation||0}</p><button class="btn" onclick="closeModal()">Закрыть</button></div>`);
+    };
+    window.closeModal=()=>{document.querySelector('.overlay')?.remove();document.querySelector('.profile-card')?.remove();};
+    window.changeRole=async(userId,roleId)=>{
+        roleId=parseInt(roleId);
+        if(currentUser.role_id===2){
+            let targetUser=(await fetchAllUsers()).find(u=>u.id===userId);
+            if(targetUser.role_id===1||targetUser.role_id===2){ alert('Вы не можете изменять роль у Шефа или другого Зам. шефа'); return; }
+        }
+        let positionName='',department=null;
+        if(roleId===1)positionName='Шеф полиции';
+        else if(roleId===2)positionName='Заместитель Шефа';
+        else if(roleId===3){positionName='Начальник PAI';department='PAI';}
+        else if(roleId===4){positionName='Начальник CPD';department='CPD';}
+        else if(roleId===5){positionName='Начальник SWAT';department='SWAT';}
+        else if(roleId===6){positionName='Начальник IAD';department='IAD';}
+        else if(roleId===7){positionName='Начальник PAD';department='PAD';}
+        else if(roleId===8){positionName='Начальник GATE';department='GATE';}
+        else if(roleId===9){positionName='Зам. начальника PAI';department='PAI';}
+        else if(roleId===10){positionName='Зам. начальника CPD';department='CPD';}
+        else if(roleId===11){positionName='Зам. начальника SWAT';department='SWAT';}
+        else if(roleId===12){positionName='Зам. начальника IAD';department='IAD';}
+        else if(roleId===13){positionName='Зам. начальника PAD';department='PAD';}
+        else if(roleId===14){positionName='Зам. начальника GATE';department='GATE';}
+        else{positionName='Рядовой сотрудник';department=null;}
+        await updateUserRole(userId,roleId,positionName,department);
+        refreshAll();
+    };
+    function getRoleOptions(roleId){
+        let roles=[{id:1,name:'Шеф полиции'},{id:2,name:'Заместитель Шефа'},{id:3,name:'Начальник PAI'},{id:4,name:'Начальник CPD'},{id:5,name:'Начальник SWAT'},{id:6,name:'Начальник IAD'},{id:7,name:'Начальник PAD'},{id:8,name:'Начальник GATE'},{id:9,name:'Зам. PAI'},{id:10,name:'Зам. CPD'},{id:11,name:'Зам. SWAT'},{id:12,name:'Зам. IAD'},{id:13,name:'Зам. PAD'},{id:14,name:'Зам. GATE'},{id:15,name:'Рядовой'}];
+        return roles.map(r=>`<option value="${r.id}" ${roleId===r.id?'selected':''}>${r.name}</option>`).join('');
+    }
+
+    async function renderSeniorStaff(){
+        if(!currentUser||(currentUser.role_id!==1&&currentUser.role_id!==2)) return;
+        let users=await fetchAllUsers();
+        let html=`<h2 class="section-title" style="margin-top:40px;">👥 СТАРШИЙ СОСТАВ</h2><div class="compact-stats">`;
+        for(let u of users){
+            html+=`<div class="compact-dept-card" onclick="showProfile(${u.id})"><h3>${escapeHtml(u.first_name)} ${escapeHtml(u.last_name)}</h3><p>${roleNames[u.role_id]}</p><p>📊 Отчётов: ${u.total_reports||0} | ⭐ Репутация: ${u.reputation||0}</p>${(currentUser.role_id===1||currentUser.role_id===2)?`<select class="role-select" data-user="${u.id}" onchange="changeRole('${u.id}',this.value)">${getRoleOptions(u.role_id)}</select>`:''}</div>`;
+        }
+        html+=`</div>`;
+        const old=document.getElementById('seniorStaff');
+        if(old)old.remove();
+        const div=document.createElement('div');div.id='seniorStaff';div.innerHTML=html;
+        document.querySelector('.main-content .container').appendChild(div);
+    }
+
+    window.logout=()=>{localStorage.clear();currentUser=null;location.reload();};
+    function escapeHtml(s){return s?.replace(/[&<>]/g,m=>m==='&'?'&amp;':m==='<'?'&lt;':'&gt;')||'';}
+
+    async function handleAuth(){
+        const hash=window.location.hash.substring(1), params=new URLSearchParams(hash), token=params.get('access_token');
+        if(token){
+            localStorage.setItem('token',token);
+            const user=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${token}`}}).then(r=>r.json());
+            if(user){
+                const dbUser=await getDBUser(user.email);
+                if(dbUser&&dbUser.first_name&&dbUser.last_name){
+                    localStorage.setItem('lspd_user',JSON.stringify(dbUser));
+                    window.location.href=window.location.origin;
+                }else{
+                    showNameForm(user.email,user.user_metadata.avatar_url);
+                }
+            }
+        }else{
+            await loadUserAndRefresh();
+            await renderSeniorStaff();
+        }
+    }
+    handleAuth();
+</script>
+</body>
+</html>
