@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSPD — Вход</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',system-ui;background:#0a0c15;color:#e8edf5;text-align:center;padding-top:100px}
+        .google-btn{background:#4285F4;color:white;padding:12px 24px;border:none;border-radius:30px;font-size:16px;cursor:pointer;margin-top:20px}
+        .google-btn:hover{background:#2a6ef0}
+        .lspd-badge{font-size:80px;margin-bottom:20px}
+    </style>
+</head>
+<body>
+    <div class="lspd-badge">👮‍♂️⭐👮‍♀️</div>
+    <h1 style="color:#00aaff">LSPD PORTAL</h1>
+    <p>Вход через Google</p>
+    <button class="google-btn" onclick="loginWithGoogle()">🔐 Войти через Google</button>
+
+    <script>
+        const SUPABASE_URL = 'https://xhgudkefqmntnekaxgke.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_Svhz_VfE3OTEJckPSHoHrw_2e5BxGQF';
+
+        function loginWithGoogle() {
+            const redirectTo = window.location.origin + '/dashboard.html';
+            window.location.href = `${SUPABASE_URL}/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectTo)}`;
+        }
+    </script>
+</body>
+</html>
