@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>LSPD — тест скорости</title>
+</head>
+<body style="background:#0a0c15; color:white; font-family:system-ui; padding:20px;">
+    <h1>👮 LSPD — тест подключения к Supabase</h1>
+    <div id="status">⏳ Проверка...</div>
+    <div id="data"></div>
+    <script>
+        const SUPABASE_URL = 'https://xhgudkefqmntnekaxgke.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_Svhz_VfE3OTEJckPSHoHrw_2e5BxGQF';
+        
+        async function testSupabase() {
+            try {
+                const start = Date.now();
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/users?select=*`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+                const elapsed = Date.now() - start;
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('status').innerHTML = `✅ Соединение работает (${elapsed} мс)`;
+                    document.getElementById('data').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('status').innerHTML = `❌ Ошибка: ${res.status}`;
+                }
+            } catch(e) {
+                document.getElementById('status').innerHTML = `❌ Ошибка: ${e.message}`;
+            }
+        }
+        testSupabase();
+    </script>
+</body>
+</html>
