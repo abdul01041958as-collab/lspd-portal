@@ -230,41 +230,46 @@
         `;
     }
 
-    async function handleAuth(){
-        const hash = window.location.hash.substring(1);
-        const params = new URLSearchParams(hash);
-        const token = params.get('access_token');
+   async function handleAuth(){
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const token = params.get('access_token');
+    
+    if(token){
+        localStorage.setItem('token', token);
+        const user = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+            headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}` }
+        }).then(r => r.json());
         
-        if(token){
-            localStorage.setItem('token', token);
-            const user = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-                headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${token}` }
-            }).then(r => r.json());
+        if(user){
+            const email = user.email;
+            const avatarUrl = user.user_metadata.avatar_url;
             
-            if(user){
-                const email = user.email;
-                const avatarUrl = user.user_metadata.avatar_url;
-                const dbUser = await getDBUser(email);
-                
-                if(dbUser && dbUser.first_name && dbUser.last_name){
-                    currentUser = dbUser;
-                    localStorage.setItem('lspd_user', JSON.stringify(currentUser));
-                    window.location.href = window.location.origin;
-                } else {
-                    showNameForm(email, avatarUrl);
-                }
-            }
-        } else {
-            const saved = localStorage.getItem('lspd_user');
-            if(saved){
-                currentUser = JSON.parse(saved);
-                document.getElementById('navButtons').innerHTML = `<button class="nav-btn" onclick="showProfile(${currentUser.id})">👤 Личный кабинет</button><button class="nav-btn" onclick="logout()">🚪 Выйти</button>`;
-                renderDashboard();
+            // ОТЛАДКА: покажем email
+            alert('Ваш email из Google: ' + email);
+            
+            const dbUser = await getDBUser(email);
+            
+            if(dbUser && dbUser.first_name && dbUser.last_name){
+                currentUser = dbUser;
+                localStorage.setItem('lspd_user', JSON.stringify(currentUser));
+                window.location.href = window.location.origin;
             } else {
-                showLoginScreen();
+                alert('Пользователь не найден в таблице users. Заполните имя и фамилию.');
+                showNameForm(email, avatarUrl);
             }
         }
+    } else {
+        const saved = localStorage.getItem('lspd_user');
+        if(saved){
+            currentUser = JSON.parse(saved);
+            document.getElementById('navButtons').innerHTML = `<button class="nav-btn" onclick="showProfile(${currentUser.id})">👤 Личный кабинет</button><button class="nav-btn" onclick="logout()">🚪 Выйти</button>`;
+            renderDashboard();
+        } else {
+            showLoginScreen();
+        }
     }
+}
 
     window.logout = () => {
         localStorage.clear();
